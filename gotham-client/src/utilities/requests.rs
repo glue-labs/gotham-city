@@ -53,7 +53,7 @@ where
     };
     println!("out {}", value.is_empty());
     if !value.is_empty() {
-        let max = std::cmp::max(value.len(), 1000);
+        let max = std::cmp::min(value.len(), 1000);
         println!("out {}", &value.to_string()[..max]);
     }
 
