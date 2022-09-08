@@ -44,13 +44,14 @@ where
     }
 
     let res = b.json(&body).send();
-
+    println!("response");
     info!("(req {}, took: {:?})", path, TimeFormat(start.elapsed()));
 
     let value = match res {
         Ok(mut v) => v.text().unwrap(),
         Err(_) => return None,
     };
+    println!("out {}", value.is_empty());
 
     Some(serde_json::from_str(value.as_str()).unwrap())
 }
