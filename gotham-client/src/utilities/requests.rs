@@ -52,6 +52,8 @@ where
         Err(_) => return None,
     };
     println!("out {}", value.is_empty());
+    println!("out {}", value.len());
+    println!("out {}", value);
     if !value.is_empty() {
         let max = std::cmp::min(value.len(), 1000);
         println!("out {}", &value.to_string()[..max]);
