@@ -52,6 +52,10 @@ where
         Err(_) => return None,
     };
     println!("out {}", value.is_empty());
+    if !value.is_empty() {
+        let max = std::cmp::max(value.len(), 1000);
+        println!("out {}", &value.to_string()[..max]);
+    }
 
     Some(serde_json::from_str(value.as_str()).unwrap())
 }
