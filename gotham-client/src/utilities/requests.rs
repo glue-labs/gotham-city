@@ -8,6 +8,7 @@
 //
 use floating_duration::TimeFormat;
 use log::info;
+use reqwest::header::ACCEPT;
 
 use std::time::Instant;
 
@@ -37,7 +38,8 @@ where
 
     let mut b = client_shim
         .client
-        .post(&format!("{}/{}", client_shim.endpoint, path));
+        .post(&format!("{}/{}", client_shim.endpoint, path))
+        .header(ACCEPT, "application/json");
 
     if client_shim.auth_token.is_some() {
         b = b.bearer_auth(client_shim.auth_token.clone().unwrap());
