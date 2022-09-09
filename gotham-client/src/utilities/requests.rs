@@ -9,6 +9,8 @@
 use floating_duration::TimeFormat;
 use log::info;
 use reqwest::header::ACCEPT;
+extern crate base64;
+use base64::{decode};
 
 use std::time::Instant;
 
@@ -53,13 +55,11 @@ where
         Ok(mut v) => v.text().unwrap(),
         Err(_) => return None,
     };
-    println!("out {}", value.is_empty());
-    println!("out {}", value.len());
-    println!("out {}", value);
-    if !value.is_empty() {
-        let max = std::cmp::min(value.len(), 1000);
-        println!("out {}", &value.to_string()[..max]);
+    let decoded = decode(value.as_str());
+    match decoded {
+        Ok(v) => {
+            return Some(serde_json::from_str(std::str::from_utf8(&v).unwrap()).unwrap())
+        },
+        Err(_) => return Some(serde_json::from_str(&value).unwrap()),
     }
-
-    Some(serde_json::from_str(value.as_str()).unwrap())
 }
