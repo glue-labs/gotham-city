@@ -58,8 +58,10 @@ where
     let decoded = decode(value.as_str());
     match decoded {
         Ok(v) => {
-            return Some(serde_json::from_str(std::str::from_utf8(&v).unwrap()).unwrap())
+            let json_str = std::str::from_utf8(&v).unwrap();
+            println!("parsing {}", json_str);
+            return Some(serde_json::from_str(json_str).unwrap())
         },
-        Err(_) => return Some(serde_json::from_str(&value).unwrap()),
+        Err(_) => return Some(serde_json::from_str(value.as_str()).unwrap()),
     }
 }
