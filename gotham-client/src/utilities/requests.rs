@@ -59,7 +59,8 @@ where
     match decoded {
         Ok(v) => {
             let json_str = std::str::from_utf8(&v).unwrap();
-            println!("parsing {}", json_str);
+            let max = std::cmp::min(json_str.len(), 1000);
+            println!("parsing {}", &json_str[..max]);
             return Some(serde_json::from_str(json_str).unwrap())
         },
         Err(_) => return Some(serde_json::from_str(value.as_str()).unwrap()),
