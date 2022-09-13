@@ -9,8 +9,6 @@
 use floating_duration::TimeFormat;
 use log::info;
 use reqwest::header::ACCEPT;
-extern crate base64;
-use base64::{decode};
 
 use std::time::Instant;
 
@@ -55,14 +53,15 @@ where
         Ok(mut v) => v.text().unwrap(),
         Err(_) => return None,
     };
-    let decoded = decode(value.as_str());
-    match decoded {
-        Ok(v) => {
-            let json_str = std::str::from_utf8(&v).unwrap();
-            let max = std::cmp::min(json_str.len(), 1000);
-            println!("parsing {}", &json_str[..max]);
-            return Some(serde_json::from_str(json_str).unwrap())
-        },
-        Err(_) => return Some(serde_json::from_str(value.as_str()).unwrap()),
-    }
+    // let decoded = decode(value.as_str());
+    // match decoded {
+    //     Ok(v) => {
+    //         let json_str = std::str::from_utf8(&v).unwrap();
+    //         let max = std::cmp::min(json_str.len(), 1000);
+    //         println!("parsing {}", &json_str[..max]);
+    //         return Some(serde_json::from_str(json_str).unwrap())
+    //     },
+    //     Err(_) => return Some(serde_json::from_str(value.as_str()).unwrap()),
+    // }
+    Some(serde_json::from_str(value.as_str()).unwrap())
 }
