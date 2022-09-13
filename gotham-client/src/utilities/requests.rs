@@ -1,3 +1,4 @@
+use base64::decode;
 // Gotham-city
 //
 // Copyright 2018 by Kzen Networks (kzencorp.com)
@@ -46,22 +47,26 @@ where
     }
 
     let res = b.json(&body).send();
-    println!("response");
     info!("(req {}, took: {:?})", path, TimeFormat(start.elapsed()));
-
     let value = match res {
-        Ok(mut v) => v.text().unwrap(),
+        Ok(mut v) => {
+            for key in v.headers().keys() {
+                println!("header {:?}", key);
+            }
+            v.text().unwrap()
+        },
         Err(_) => return None,
     };
-    // let decoded = decode(value.as_str());
-    // match decoded {
-    //     Ok(v) => {
-    //         let json_str = std::str::from_utf8(&v).unwrap();
-    //         let max = std::cmp::min(json_str.len(), 1000);
-    //         println!("parsing {}", &json_str[..max]);
-    //         return Some(serde_json::from_str(json_str).unwrap())
-    //     },
-    //     Err(_) => return Some(serde_json::from_str(value.as_str()).unwrap()),
-    // }
-    Some(serde_json::from_str(value.as_str()).unwrap())
+    println!("response {}", value.len());
+    let decoded = decode(value.as_str());
+    match decoded {
+        Ok(v) => {
+            let json_str = std::str::from_utf8(&v).unwrap();
+            let max = std::cmp::min(json_str.len(), 1000);
+            println!("parsing {}", &json_str[..max]);
+            return Some(serde_json::from_str(json_str).unwrap())
+        },
+        Err(_) => return Some(serde_json::from_str(value.as_str()).unwrap()),
+    }
+    // Some(serde_json::from_str(value.as_str()).unwrap())
 }
