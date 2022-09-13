@@ -51,7 +51,7 @@ where
     let value = match res {
         Ok(mut v) => {
             for key in v.headers().keys() {
-                println!("header {:?}", key);
+                println!("header {:?} {:?}", key, v.headers().get(key));
             }
             v.text().unwrap()
         },
