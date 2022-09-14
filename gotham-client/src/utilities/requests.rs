@@ -36,10 +36,10 @@ where
     V: serde::de::DeserializeOwned,
 {
     let start = Instant::now();
-    println!("calling {}{}", client_shim.endpoint, path);
+    println!("calling {}/{}", client_shim.endpoint, path);
     let mut b = client_shim
         .client
-        .post(&format!("{}{}", client_shim.endpoint, path))
+        .post(&format!("{}/{}", client_shim.endpoint, path))
         .header(ACCEPT, "application/json");
 
     if client_shim.auth_token.is_some() {
