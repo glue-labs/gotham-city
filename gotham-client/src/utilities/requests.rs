@@ -71,7 +71,7 @@ where
             match val {
                 Ok(v) => v,
                 Err(_) => {
-                    println!("Error parsing json in requests");
+                    println!("Error parsing json in requests {}", value.as_str());
                     return None;
                 },
             }
