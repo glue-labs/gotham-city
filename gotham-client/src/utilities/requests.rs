@@ -66,7 +66,16 @@ where
             println!("parsing {}", &json_str[..max]);
             return Some(serde_json::from_str(json_str).unwrap())
         },
-        Err(_) => return Some(serde_json::from_str(value.as_str()).unwrap()),
+        Err(_) => {
+            let val = serde_json::from_str(value.as_str());
+            match val {
+                Ok(v) => v,
+                Err(_) => {
+                    println!("Error parsing json in requests");
+                    return None;
+                },
+            }
+        },
     }
     // Some(serde_json::from_str(value.as_str()).unwrap())
 }
