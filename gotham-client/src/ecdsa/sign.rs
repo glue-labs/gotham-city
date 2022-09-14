@@ -38,7 +38,7 @@ pub fn sign(
 
     let request: party_two::EphKeyGenFirstMsg = eph_key_gen_first_message_party_two;
     let sign_party_one_first_message: party_one::EphKeyGenFirstMsg =
-        match requests::postb(client_shim, &format!("/ecdsa/sign/{}/first", id), &request) {
+        match requests::postb(client_shim, &format!("ecdsa/sign/{}/first", id), &request) {
             Some(s) => s,
             None => return Err(failure::err_msg("party1 sign first message request failed")),
         };
@@ -81,7 +81,7 @@ fn get_signature(
     };
 
     let signature: party_one::SignatureRecid =
-        match requests::postb(client_shim, &format!("/ecdsa/sign/{}/second", id), &request) {
+        match requests::postb(client_shim, &format!("ecdsa/sign/{}/second", id), &request) {
             Some(s) => s,
             None => {
                 return Err(failure::err_msg(
