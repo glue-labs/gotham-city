@@ -597,18 +597,18 @@ async fn has_active_share(db: &db::DB, user_id: &str) -> Result<bool, String> {
                 },
             );
 
-            let query_input = QueryInput {
+            let scan_input = ScanInput {
                 table_name: format!("{}_Party1MasterKey", env),
                 projection_expression: Some("id".into()),
-                key_condition_expression: Some("customerId = :customerId".into()),
-                filter_expression: Some("isDeleted <> :deleted".into()),
+                // key_condition_expression: Some("".into()),
+                filter_expression: Some("isDeleted <> :deleted and customerId = :customerId".into()),
                 expression_attribute_values: Some(expression_attribute_values),
                 consistent_read: Some(true),
-                ..QueryInput::default()
+                ..ScanInput::default()
             };
-            let result = dynamodb_client.query(query_input).await;
+            let result = dynamodb_client.scan(scan_input).await;
             match result {
-                Ok(query_output) => query_output
+                Ok(scan_output) => scan_output
                     .items
                     .map_or(Ok(false), |items| Ok(items.len() > 0)),
                 Err(e) => Err(format!(
@@ -616,6 +616,26 @@ async fn has_active_share(db: &db::DB, user_id: &str) -> Result<bool, String> {
                     user_id, e
                 )),
             }
+
+            // let query_input = QueryInput {
+            //     table_name: format!("{}_Party1MasterKey", env),
+            //     projection_expression: Some("id".into()),
+            //     key_condition_expression: Some("customerId = :customerId".into()),
+            //     filter_expression: Some("isDeleted <> :deleted".into()),
+            //     expression_attribute_values: Some(expression_attribute_values),
+            //     consistent_read: Some(true),
+            //     ..QueryInput::default()
+            // };
+            // let result = dynamodb_client.query(query_input).await;
+            // match result {
+            //     Ok(query_output) => query_output
+            //         .items
+            //         .map_or(Ok(false), |items| Ok(items.len() > 0)),
+            //     Err(e) => Err(format!(
+            //         "Error retrieving Party1MasterKey for customerId {}: {:?}",
+            //         user_id, e
+            //     )),
+            // }
         }
     }
 }
