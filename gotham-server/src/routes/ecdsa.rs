@@ -22,7 +22,7 @@ use uuid::Uuid;
 use serde::{Serialize, Deserialize};
 use failure::format_err;
 use log::{warn,error};
-use rusoto_dynamodb::{QueryInput,AttributeValue};
+use rusoto_dynamodb::{QueryInput,AttributeValue,ScanInput};
 use std::collections::HashMap;
 
 use crate::{auth::jwt::Claims, storage::db, Config};
